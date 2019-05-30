@@ -23,7 +23,6 @@ $(function () {
         //0滚动条插件
         $(".content_list").mCustomScrollbar();
 
-
         var $audio = $("audio");
         var player = new Player($audio);
         var progress;
@@ -140,11 +139,62 @@ $(function () {
 
 
             // 2.监听复选框的点击事件
+            //.delegate方法：当点击鼠标时，隐藏或显示 当前 元素：
+            //.toggleClass对设置和移除所有 当前 元素的 "list_checked" 类进行切换：
+
             $(".content_list").delegate(".list_check", "click", function () {
                 $(this).toggleClass("list_checked");
             });
+                //顶部删除歌曲
+                $('.delete').click(function () {
+                    if ($(".list_check").hasClass("list_checked")){
+                        $('.list_checked').parent().remove();
+                        let index = 1;
+                        $('.list_check').parent().each(function () {
+                            if ($(this).find('.list_name').text() !== '歌曲'){
+                                $(this).find('.list_number').text(index);
+                                index += 1;
+                            }
+                        })
+                    } else {
+                        alert("请选择操作的歌单");
+                    }
+                });
+                //顶部下载
+                $(".download").click(function () {
+                     if ($(".list_check").hasClass("list_checked")){
+                        alert("下载到本地我还不会..");
+                    } else {
+                        alert("请选择操作的歌单");
+                    }
+                });
+                //顶部切换红心
+                //bug切换歌曲红心不会消除啊啊啊
+                $(".redheart").click(function () {
+                    if ($(".list_check").hasClass("list_checked")){
+                        $(".music_fav").addClass("music_fav_like");
+                    } else {
+                        alert("请选择操作的歌单");
+                    }
+                });
 
+            //切换红心
+            $(".footer_in").delegate(".music_fav", "click", function () {
+                $(this).toggleClass("music_fav_like");
+            });
 
+            //切换纯净模式 我没写完
+            $(".footer_in").delegate(".music_only", "click", function () {
+                $(this).toggleClass("music_only_on");
+            });
+            $(".music_only").click(function () {
+                if ($(".music_only").hasClass("music_only_on")){
+                    $(".content_in").css("display","block");
+                } else{
+                    $(".content_in").css("display","none");
+
+                }
+            });
             //3添加了子菜单播放按钮的监听
             let $musicPlay = $(".music_play");
             $(".content_list").delegate(".list_menu_play", "click", function () {
@@ -252,7 +302,7 @@ $(function () {
                 player.musicVoiceSeekTo(1);
             }
         });
-        
+
     };
         //定义一个方法创建一条音乐
         function crateMusicItem(index, music) {
